@@ -1,16 +1,28 @@
 from django.db import models
 
-class Model(models.Model):
+class Country(models.Model):
+    name = models.CharField(max_length=255, unique=True)
 
-    car_title = models.CharField(max_length=255)
-    state = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
-    color = models.CharField(max_length=100)
-    model = models.CharField(max_length=100)
+class Size(models.Model):
+    size = models.CharField(max_length=255, unique=True)
+
+
+class SpeedIndex(models.Model):
+    value = models.CharField(max_length=255, unique=True)
+
+class WeightIndex(models.Model):
+    value = models.CharField(max_length=255, unique=True)
+
+class Manufacturer(models.Model):
+    name = models.CharField(max_length=255)
+    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING)
+    class Meta:
+        unique_together = ['name','country']
+
+class Tire(models.Model):
+    name = models.CharField(max_length=255)
     year = models.IntegerField()
-    condition = models.CharField(max_length=100)
-    price = models.IntegerField()
-
-    def __str__(self):
-        return self.car_title
-
+    size = models.ForeignKey(Size, on_delete=models.DO_NOTHING)
+    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.DO_NOTHING)
+    speed_index = models.ForeignKey(SpeedIndex, on_delete=models.DO_NOTHING)
+    weight_index = models.ForeignKey(WeightIndex, on_delete=models.DO_NOTHING)
